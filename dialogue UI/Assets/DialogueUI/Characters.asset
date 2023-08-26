@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Characters
   m_EditorClassIdentifier: 
   characters:
-  - m_characterName: 
-    m_characterImage: {fileID: 0}
-    m_characterColor: 
-  - m_characterName: 
-    m_characterImage: {fileID: 0}
-    m_characterColor: 
+  - m_characterName: one
+    m_characterImage: {fileID: 21300000, guid: affeade9874cf2347abb155e8d0db4d8, type: 3}
+    m_characterColor: 000000FF
+  - m_characterName: two
+    m_characterImage: {fileID: 21300000, guid: cdb88fdb0cf46b244a667edaff21c7df, type: 3}
+    m_characterColor: 000000FF
