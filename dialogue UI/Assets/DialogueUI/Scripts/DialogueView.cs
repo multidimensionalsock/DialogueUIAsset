@@ -103,7 +103,7 @@ public class DialogueView : DialogueViewBase
 			//get rect transform to use later 
 			RectTransform currentLineRect = currentLine.GetComponent<RectTransform>();
 			Canvas.ForceUpdateCanvases();
-			currentLineRect.localPosition = new Vector3(96.5f, -130f, 0f);
+			currentLineRect.localPosition = new Vector3(100f, -90f, 0f);
 
 			if (UIelements.Count == 0)
 			{
@@ -115,7 +115,18 @@ public class DialogueView : DialogueViewBase
 				//move elemts of list up by the height of the new line
 				for (int i = 0; i < UIelements.Count; i++)
 				{
-					UIelements[i].position = new Vector3(UIelements[i].position.x, UIelements[i].position.y + currentLineRect.rect.height, UIelements[i].position.z);
+					float yincrease;
+					int lineNo = currentLine.GetComponent<TextMeshProUGUI>().textInfo.lineCount;
+					if (lineNo > 2)
+					{
+						yincrease = lineNo * 11.18f;
+					}
+					else
+					{
+						yincrease = (lineNo + 1) * 11.18f;
+					}
+					Debug.Log(UIelements[i].localPosition.y);
+					UIelements[i].position = new Vector3(UIelements[i].position.x, UIelements[i].position.y + yincrease, UIelements[i].position.z);
 				}
 			}
 			Debug.Log(currentLineRect.rect.width);
