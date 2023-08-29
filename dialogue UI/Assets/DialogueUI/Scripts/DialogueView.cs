@@ -60,24 +60,26 @@ public class DialogueView : DialogueViewBase
 			}
 			else
 			{
+				float yincrease;
+				switch (currentLine.GetComponent<TextMeshProUGUI>().textInfo.lineCount)
+				{
+					case 1:
+						yincrease = currentLineRect.rect.height * 2.5f;
+						break;
+					case 2:
+						yincrease = currentLineRect.rect.height * 1.5f;
+						break;
+					default:
+						yincrease= currentLineRect.rect.height;
+						break;
+				}
 				//move elemts of list up by the height of the new line
 				for (int i = 0; i < UIelements.Count; i++)
 				{
-					float yincrease;
-					int lineNo = currentLine.GetComponent<TextMeshProUGUI>().textInfo.lineCount;
-					if (lineNo > 2)
-					{
-						yincrease = lineNo * 11.18f;
-					}
-					else
-					{
-						yincrease = (lineNo + 1) * 11.18f;
-					}
-					Debug.Log(UIelements[i].localPosition.y);
+					
 					UIelements[i].position = new Vector3(UIelements[i].position.x, UIelements[i].position.y + yincrease, UIelements[i].position.z);
 				}
 			}
-			Debug.Log(currentLineRect.rect.width);
 			UIelements.Add(currentLineRect);
 
 		}
@@ -86,9 +88,15 @@ public class DialogueView : DialogueViewBase
 			Debug.Log("there is no character information found");
 		}
 			advanceHandler = requestInterrupt;
-			advanceHandler = null;
+			//advanceHandler = null;
 			onDialogueLineFinished();
 		}
+
+	public override void RunOptions(DialogueOption[] dialogueOptions, Action<int> onOptionSelected)
+	{
+
+	}
+
 
 	CharacterInformation CheckIfCharacterInDatabase(string name)
 	{
