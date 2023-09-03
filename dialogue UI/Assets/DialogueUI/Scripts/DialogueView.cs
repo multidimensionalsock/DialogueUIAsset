@@ -191,8 +191,8 @@ public class DialogueView : DialogueViewBase
 			return;
 
 		RectTransform currentLine = currentOptionLines[currentOptionPosition];
-		currentLine.localPosition = new Vector3(100f, -90f, 0f);
-		currentOptionLines[currentOptionPosition].gameObject.GetComponent<TextMeshProUGUI>().color = StandardTextColour;
+		//currentLine.localPosition = new Vector3(100f, -90f, 0f);
+		//currentOptionLines[currentOptionPosition].gameObject.GetComponent<TextMeshProUGUI>().color = StandardTextColour;
 
 		UIelements.Add(currentLine);
 		currentOptionLines.RemoveAt(currentOptionPosition);
@@ -219,7 +219,9 @@ public class DialogueView : DialogueViewBase
 			{
 				UIelements[j].position = new Vector3(UIelements[j].position.x, UIelements[j].position.y - yincrease, UIelements[j].position.z);
 			}
+			Destroy(currentOptionLines[i].gameObject);
 		}
+
 		currentOptionLines = null;
 
 	}
