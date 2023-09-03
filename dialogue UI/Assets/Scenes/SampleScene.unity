@@ -811,12 +811,8 @@ MonoBehaviour:
   characterList: {fileID: 11400000, guid: 6054159c3f7ccd646ad4ef4d569cf54f, type: 2}
   linePrefab: {fileID: 5060536034598388050, guid: 87c8af773754ecd4382a8cb599631c3b, type: 3}
   characterImage: {fileID: 1732062348}
-  OptionHighlightColour:
-    serializedVersion: 2
-    rgba: 723967
-  StandardTextColour:
-    serializedVersion: 2
-    rgba: 16777215
+  dulledOptionColour: {r: 0.5377358, g: 0.5377358, b: 0.5377358, a: 1}
+  StandardTextColour: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1732062346
 GameObject:
   m_ObjectHideFlags: 0

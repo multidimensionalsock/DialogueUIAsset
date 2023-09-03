@@ -20,8 +20,8 @@ public class DialogueView : DialogueViewBase
 	int currentOptionPosition = -1;
 	Action advanceHandler = null;
 	Action<int> SelectOption = null;
-	[SerializeField] Color32 OptionHighlightColour;
-	[SerializeField] Color32 StandardTextColour;
+	[SerializeField] Color dulledOptionColour;
+	[SerializeField] Color StandardTextColour;
 
 	PlayerInput m_input;
 
@@ -60,16 +60,19 @@ public class DialogueView : DialogueViewBase
 				if (currentOptionPosition == 0)
 					break;
 
+				currentOptionLines[currentOptionPosition].gameObject.GetComponent<TextMeshProUGUI>().color = dulledOptionColour;
 				currentOptionPosition -= 1;
-				//currentOptionLines[currentOptionPosition].gameObject.GetComponent<TextMeshProUGUI>().color = OptionHighlightColour;
+				currentOptionLines[currentOptionPosition].gameObject.GetComponent<TextMeshProUGUI>().color = StandardTextColour;
 
 				break;
 
 			case -1:
-				if (currentOptionPosition == currentOptionLines.Count)
+				if (currentOptionPosition == currentOptionLines.Count - 1)
 					break;
+
+				currentOptionLines[currentOptionPosition].gameObject.GetComponent<TextMeshProUGUI>().color = dulledOptionColour;
 				currentOptionPosition += 1;
-				//currentOptionLines[currentOptionPosition].gameObject.GetComponent<TextMeshProUGUI>().color = OptionHighlightColour;
+				currentOptionLines[currentOptionPosition].gameObject.GetComponent<TextMeshProUGUI>().color = StandardTextColour;
 				break;
 		}
 		
@@ -113,6 +116,11 @@ public class DialogueView : DialogueViewBase
 		}
 
 		currentOptionPosition = 0;
+		for (int i = 0; i < currentOptionLines.Count; i++)
+		{
+			currentOptionLines[i].GetComponent<TextMeshProUGUI>().color = dulledOptionColour;
+		}
+		currentOptionLines[0].GetComponent<TextMeshProUGUI>().color = StandardTextColour;
 
 	}
 
@@ -191,8 +199,8 @@ public class DialogueView : DialogueViewBase
 			return;
 
 		RectTransform currentLine = currentOptionLines[currentOptionPosition];
-		//currentLine.localPosition = new Vector3(100f, -90f, 0f);
-		//currentOptionLines[currentOptionPosition].gameObject.GetComponent<TextMeshProUGUI>().color = StandardTextColour;
+		currentLine.position = currentOptionLines[0].position;
+		currentOptionLines[currentOptionPosition].gameObject.GetComponent<TextMeshProUGUI>().color = StandardTextColour;
 
 		UIelements.Add(currentLine);
 		currentOptionLines.RemoveAt(currentOptionPosition);
@@ -219,6 +227,9 @@ public class DialogueView : DialogueViewBase
 			{
 				UIelements[j].position = new Vector3(UIelements[j].position.x, UIelements[j].position.y - yincrease, UIelements[j].position.z);
 			}
+		}
+		for (int i = 0; i < currentOptionLines.Count; i++)
+		{
 			Destroy(currentOptionLines[i].gameObject);
 		}
 
