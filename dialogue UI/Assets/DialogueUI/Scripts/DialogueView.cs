@@ -133,7 +133,8 @@ public class DialogueView : DialogueViewBase
 			GameObject currentLine = Instantiate(linePrefab);
 			currentLine.transform.SetParent(this.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).transform.GetChild(0));
 			characterImage.sprite = character.m_characterImage; //set sprite for current character
-			//currentLine.GetComponent<TextMeshProUGUI>().color = StandardTextColour;
+																//currentLine.GetComponent<TextMeshProUGUI>().color = StandardTextColour;
+			currentLine.gameObject.GetComponent<TextMeshProUGUI>().color = StandardTextColour;
 			currentLine.GetComponent<TextMeshProUGUI>().text = "<b><color=#" + character.m_characterColor + "> " + dialogueLine.CharacterName
 				+ ": </color></b>" + dialogueLine.TextWithoutCharacterName.Text;
 			
