@@ -137,9 +137,11 @@ public class DialogueView : DialogueViewBase
 		string newDialogueLine;
 		if (character != null)
 		{
-			newDialogueLine = "<b><color=#" + character.m_characterColor + "> " + dialogueLine.CharacterName
+			Debug.Log("charactr not null");
+			newDialogueLine = "<b><color=#" + UnityEngine.ColorUtility.ToHtmlStringRGBA(character.m_characterColor) + "> " + dialogueLine.CharacterName
 				+ ": </color></b>" + dialogueLine.TextWithoutCharacterName.Text;
 			characterImage.sprite = character.m_characterImage; //set sprite for current character
+			
 		}
 		else
 		{
