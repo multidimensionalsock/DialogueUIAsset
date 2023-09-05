@@ -139,23 +139,24 @@ public class DialogueView : DialogueViewBase
 		{
 			newDialogueLine = "<b><color=#" + character.m_characterColor + "> " + dialogueLine.CharacterName
 				+ ": </color></b>" + dialogueLine.TextWithoutCharacterName.Text;
+			characterImage.sprite = character.m_characterImage; //set sprite for current character
 		}
 		else
 		{
+			//if the character isnt found in the database it wont display the name before the dialogue line
+			//and wont update to a new character picture.
 			newDialogueLine = dialogueLine.TextWithoutCharacterName.Text;
 		}
 
 		GameObject currentLine = Instantiate(linePrefab);
 		currentLine.transform.SetParent(this.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).transform.GetChild(0));
-		characterImage.sprite = character.m_characterImage; //set sprite for current character
-															//currentLine.GetComponent<TextMeshProUGUI>().color = StandardTextColour;
 		currentLine.gameObject.GetComponent<TextMeshProUGUI>().color = StandardTextColour;
 		currentLine.GetComponent<TextMeshProUGUI>().text = newDialogueLine;
 			
 		//get rect transform to use later 
 		RectTransform currentLineRect = currentLine.GetComponent<RectTransform>();
 		Canvas.ForceUpdateCanvases();
-		currentLineRect.localPosition = new Vector3(100f, -90f, 0f);
+		currentLineRect.localPosition = new Vector3(100f, -130f, 0f); 
 
 		Debug.Log(UIelements);
 		if (UIelements.Count < 0)
