@@ -22,11 +22,13 @@ public class DialogueView : DialogueViewBase
 	Action<int> SelectOption = null;
 	[SerializeField] Color dulledOptionColour;
 	[SerializeField] Color StandardTextColour;
+	bool endOnNextClick = false;
 
 	PlayerInput m_input;
 
 	private void OnEnable()
 	{
+		endOnNextClick= false;
 		UIelements = new List<RectTransform>();
 		m_input = GetComponent<PlayerInput>();
 		m_input.currentActionMap.FindAction("NextLine").performed += CallNextLine;
@@ -35,6 +37,11 @@ public class DialogueView : DialogueViewBase
 
 	void CallNextLine(InputAction.CallbackContext context)
 	{
+		if (endOnNextClick)
+		{
+			endOnNextClick = false;
+			gameObject.SetActive(false);
+		}
 		if (currentOptionLines != null)
 		{
 			RemoveLines();
@@ -127,69 +134,67 @@ public class DialogueView : DialogueViewBase
 	private RectTransform OutputLine(LocalizedLine dialogueLine)
 	{
 		CharacterInformation character = CheckIfCharacterInDatabase(dialogueLine.CharacterName);
+		string newDialogueLine;
 		if (character != null)
 		{
-
-			GameObject currentLine = Instantiate(linePrefab);
-			currentLine.transform.SetParent(this.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).transform.GetChild(0));
-			characterImage.sprite = character.m_characterImage; //set sprite for current character
-																//currentLine.GetComponent<TextMeshProUGUI>().color = StandardTextColour;
-			currentLine.gameObject.GetComponent<TextMeshProUGUI>().color = StandardTextColour;
-			currentLine.GetComponent<TextMeshProUGUI>().text = "<b><color=#" + character.m_characterColor + "> " + dialogueLine.CharacterName
+			newDialogueLine = "<b><color=#" + character.m_characterColor + "> " + dialogueLine.CharacterName
 				+ ": </color></b>" + dialogueLine.TextWithoutCharacterName.Text;
-			
-
-
-			//get rect transform to use later 
-			RectTransform currentLineRect = currentLine.GetComponent<RectTransform>();
-			Canvas.ForceUpdateCanvases();
-			currentLineRect.localPosition = new Vector3(100f, -90f, 0f);
-
-			Debug.Log(UIelements);
-			if (UIelements.Count < 0)
-			{
-				Debug.Log("list was zero");
-			}
-			else
-			{
-				float yincrease;
-				switch (currentLine.GetComponent<TextMeshProUGUI>().textInfo.lineCount)
-				{
-					case 1:
-						yincrease = currentLineRect.rect.height * 2.5f;
-						break;
-					case 2:
-						yincrease = currentLineRect.rect.height * 1.5f;
-						break;
-					default:
-						yincrease = currentLineRect.rect.height;
-						break;
-				}
-				//move elemts of list up by the height of the new line
-				//RectTransform parent = currentLine.transform.parent.GetComponent<RectTransform>();
-				//	parent.sizeDelta = new Vector2(parent.sizeDelta.x, parent.sizeDelta.y + yincrease); 
-				for (int i = 0; i < UIelements.Count; i++)
-				{
-					UIelements[i].position = new Vector3(UIelements[i].position.x, UIelements[i].position.y + yincrease, UIelements[i].position.z);
-				}
-				if (currentOptionLines != null)
-				{
-					if (currentOptionLines.Count > 0)
-					{
-						for (int i = 0; i < currentOptionLines.Count; i++)
-						{
-							currentOptionLines[i].position = new Vector3(currentOptionLines[i].position.x, currentOptionLines[i].position.y + yincrease, currentOptionLines[i].position.z);
-						}
-					}
-				}
-				return currentLineRect;
-			}
-			
-
 		}
 		else
 		{
-			Debug.Log("there is no character information found");
+			newDialogueLine = dialogueLine.TextWithoutCharacterName.Text;
+		}
+
+		GameObject currentLine = Instantiate(linePrefab);
+		currentLine.transform.SetParent(this.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).transform.GetChild(0));
+		characterImage.sprite = character.m_characterImage; //set sprite for current character
+															//currentLine.GetComponent<TextMeshProUGUI>().color = StandardTextColour;
+		currentLine.gameObject.GetComponent<TextMeshProUGUI>().color = StandardTextColour;
+		currentLine.GetComponent<TextMeshProUGUI>().text = newDialogueLine;
+			
+		//get rect transform to use later 
+		RectTransform currentLineRect = currentLine.GetComponent<RectTransform>();
+		Canvas.ForceUpdateCanvases();
+		currentLineRect.localPosition = new Vector3(100f, -90f, 0f);
+
+		Debug.Log(UIelements);
+		if (UIelements.Count < 0)
+		{
+			Debug.Log("list was zero");
+		}
+		else
+		{
+			float yincrease;
+			switch (currentLine.GetComponent<TextMeshProUGUI>().textInfo.lineCount)
+			{
+				case 1:
+					yincrease = currentLineRect.rect.height * 2.5f;
+					break;
+				case 2:
+					yincrease = currentLineRect.rect.height * 1.5f;
+					break;
+				default:
+					yincrease = currentLineRect.rect.height;
+					break;
+			}
+			//move elemts of list up by the height of the new line
+			//RectTransform parent = currentLine.transform.parent.GetComponent<RectTransform>();
+			//	parent.sizeDelta = new Vector2(parent.sizeDelta.x, parent.sizeDelta.y + yincrease); 
+			for (int i = 0; i < UIelements.Count; i++)
+			{
+				UIelements[i].position = new Vector3(UIelements[i].position.x, UIelements[i].position.y + yincrease, UIelements[i].position.z);
+			}
+			if (currentOptionLines != null)
+			{
+				if (currentOptionLines.Count > 0)
+				{
+					for (int i = 0; i < currentOptionLines.Count; i++)
+					{
+						currentOptionLines[i].position = new Vector3(currentOptionLines[i].position.x, currentOptionLines[i].position.y + yincrease, currentOptionLines[i].position.z);
+					}
+				}
+			}
+			return currentLineRect;
 		}
 		return null;
 	}
@@ -281,4 +286,9 @@ public class DialogueView : DialogueViewBase
 		{
 			advanceHandler?.Invoke();
 		}
+
+	public override void DialogueComplete()
+	{
+		endOnNextClick= true;
 	}
+}
