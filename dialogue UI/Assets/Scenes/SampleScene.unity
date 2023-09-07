@@ -813,6 +813,7 @@ MonoBehaviour:
   characterImage: {fileID: 1732062348}
   dulledOptionColour: {r: 0.5377358, g: 0.5377358, b: 0.5377358, a: 1}
   StandardTextColour: {r: 1, g: 1, b: 1, a: 1}
+  lineIssueNumber: 4
 --- !u!1 &1732062346
 GameObject:
   m_ObjectHideFlags: 0

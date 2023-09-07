@@ -23,6 +23,7 @@ public class DialogueView : DialogueViewBase
 	[SerializeField] Color dulledOptionColour;
 	[SerializeField] Color StandardTextColour;
 	bool endOnNextClick = false;
+	[SerializeField] float lineIssueNumber;
 
 	PlayerInput m_input;
 
@@ -139,7 +140,7 @@ public class DialogueView : DialogueViewBase
 		{
 			Debug.Log("charactr not null");
 			newDialogueLine = "<b><color=#" + UnityEngine.ColorUtility.ToHtmlStringRGBA(character.m_characterColor) + "> " + dialogueLine.CharacterName
-				+ ": </color></b>" + dialogueLine.TextWithoutCharacterName.Text;
+				+ ": </color></b>" + dialogueLine.TextWithoutCharacterName.Text + dialogueLine.TextWithoutCharacterName.Text;
 			characterImage.sprite = character.m_characterImage; //set sprite for current character
 			
 		}
@@ -167,19 +168,28 @@ public class DialogueView : DialogueViewBase
 		}
 		else
 		{
-			float yincrease;
-			switch (currentLine.GetComponent<TextMeshProUGUI>().textInfo.lineCount)
-			{
-				case 1:
-					yincrease = currentLineRect.rect.height * 2.5f;
-					break;
-				case 2:
-					yincrease = currentLineRect.rect.height * 1.5f;
-					break;
-				default:
-					yincrease = currentLineRect.rect.height;
-					break;
-			}
+			int linecount = currentLine.GetComponent<TextMeshProUGUI>().textInfo.lineCount;
+
+			float yincrease = Mathf.CeilToInt((currentLineRect.rect.height / linecount) * (linecount + 1));
+			
+				
+			//switch (currentLine.GetComponent<TextMeshProUGUI>().textInfo.lineCount)
+			//{
+			//	case 1:
+			//		yincrease = currentLineRect.rect.height * lineSpaceMultiplier * 2;
+			//		break;
+			//	case 2:
+			//		yincrease = currentLineRect.rect.height * lineSpaceMultiplier * 1.5f;
+			//		break;
+			//	default:
+			//		float spacemul = (lineSpaceMultiplier / (currentLine.GetComponent<TextMeshProUGUI>().textInfo.lineCount));
+			//		if (spacemul < 1)
+			//		{
+			//			spacemul = 1;
+			//		}
+			//		yincrease = currentLineRect.rect.height * spacemul;
+			//		break;
+			//}
 			//move elemts of list up by the height of the new line
 			//RectTransform parent = currentLine.transform.parent.GetComponent<RectTransform>();
 			//	parent.sizeDelta = new Vector2(parent.sizeDelta.x, parent.sizeDelta.y + yincrease); 
