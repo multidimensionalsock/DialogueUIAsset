@@ -140,7 +140,7 @@ public class DialogueView : DialogueViewBase
 		{
 			Debug.Log("charactr not null");
 			newDialogueLine = "<b><color=#" + UnityEngine.ColorUtility.ToHtmlStringRGBA(character.m_characterColor) + "> " + dialogueLine.CharacterName
-				+ ": </color></b>" + dialogueLine.TextWithoutCharacterName.Text + dialogueLine.TextWithoutCharacterName.Text;
+				+ ": </color></b>" + dialogueLine.TextWithoutCharacterName.Text ;
 			characterImage.sprite = character.m_characterImage; //set sprite for current character
 			
 		}
@@ -168,31 +168,13 @@ public class DialogueView : DialogueViewBase
 		}
 		else
 		{
-			int linecount = currentLine.GetComponent<TextMeshProUGUI>().textInfo.lineCount;
-
-			float yincrease = Mathf.CeilToInt((currentLineRect.rect.height / linecount) * (linecount + 1));
+			TextMeshProUGUI lineMesh = currentLine.GetComponent<TextMeshProUGUI>();
+			int lineCount = lineMesh.textInfo.lineCount + 1;
+			float fontSize = lineMesh.fontSize;
 			
-				
-			//switch (currentLine.GetComponent<TextMeshProUGUI>().textInfo.lineCount)
-			//{
-			//	case 1:
-			//		yincrease = currentLineRect.rect.height * lineSpaceMultiplier * 2;
-			//		break;
-			//	case 2:
-			//		yincrease = currentLineRect.rect.height * lineSpaceMultiplier * 1.5f;
-			//		break;
-			//	default:
-			//		float spacemul = (lineSpaceMultiplier / (currentLine.GetComponent<TextMeshProUGUI>().textInfo.lineCount));
-			//		if (spacemul < 1)
-			//		{
-			//			spacemul = 1;
-			//		}
-			//		yincrease = currentLineRect.rect.height * spacemul;
-			//		break;
-			//}
-			//move elemts of list up by the height of the new line
-			//RectTransform parent = currentLine.transform.parent.GetComponent<RectTransform>();
-			//	parent.sizeDelta = new Vector2(parent.sizeDelta.x, parent.sizeDelta.y + yincrease); 
+
+            float yincrease = lineCount * fontSize;
+
 			for (int i = 0; i < UIelements.Count; i++)
 			{
 				UIelements[i].position = new Vector3(UIelements[i].position.x, UIelements[i].position.y + yincrease, UIelements[i].position.z);
@@ -226,22 +208,13 @@ public class DialogueView : DialogueViewBase
 
 		for (int i = 0; i < currentOptionLines.Count; i++)
 		{
-			float yincrease;
-			switch (currentOptionLines[i].GetComponent<TextMeshProUGUI>().textInfo.lineCount)
-			{
-				case 1:
-					yincrease = currentOptionLines[i].rect.height * 2.5f;
-					break;
-				case 2:
-					yincrease = currentOptionLines[i].rect.height * 1.5f;
-					break;
-				default:
-					yincrease = currentOptionLines[i].rect.height;
-					break;
-			}
-			//move elemts of list up by the height of the new line
-			//RectTransform parent = currentLine.transform.parent.GetComponent<RectTransform>();
-			//	parent.sizeDelta = new Vector2(parent.sizeDelta.x, parent.sizeDelta.y + yincrease); 
+
+            TextMeshProUGUI lineMesh = currentLine.GetComponent<TextMeshProUGUI>();
+            float lineCount = lineMesh.textInfo.lineCount + 0.5f;
+            float fontSize = lineMesh.fontSize;
+
+            float yincrease = lineCount * fontSize;
+			
 			for (int j = 0; j < UIelements.Count; j++)
 			{
 				UIelements[j].position = new Vector3(UIelements[j].position.x, UIelements[j].position.y - yincrease, UIelements[j].position.z);
