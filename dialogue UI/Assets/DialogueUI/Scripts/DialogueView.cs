@@ -221,14 +221,14 @@ public class DialogueView : DialogueViewBase
         previousLine.color = new Color(previousLine.color.r, previousLine.color.g, previousLine.color.b, previousLine.color.a / 2);
 
         UIelements.Add(currentLine);
-        
+        //currentLine.localPosition = new Vector3(89.5f, -130f, 0f);
         currentOptionLines.RemoveAt(currentOptionPosition);
 
-		for (int i = 0; i < currentOptionLines.Count ; i++)
+		for (int i = 0; i < currentOptionLines.Count - 1 ; i++)
 		{
 
             TextMeshProUGUI lineMesh = currentLine.GetComponent<TextMeshProUGUI>();
-            float lineCount = lineMesh.textInfo.lineCount - 0.5f;
+			float lineCount = lineMesh.textInfo.lineCount - 0.5f;
 
             float yincrease = lineCount * lineMesh.textInfo.lineInfo[0].lineHeight;
 			
@@ -238,12 +238,23 @@ public class DialogueView : DialogueViewBase
 
             }
 		}
+		for (int i = currentOptionPosition; i < currentOptionLines.Count; i++)
+		{
+            TextMeshProUGUI lineMesh = currentLine.GetComponent<TextMeshProUGUI>();
+            float lineCount = lineMesh.textInfo.lineCount - 0.5f;
+
+            float yincrease = lineCount * lineMesh.textInfo.lineInfo[0].lineHeight;
+
+            currentLine.localPosition = new Vector3(currentLine.localPosition.x, currentLine.localPosition.y - yincrease, currentLine.localPosition.z);
+
+            
+        }
 		for (int i = 0; i < currentOptionLines.Count; i++)
 		{
 			Destroy(currentOptionLines[i].gameObject);
 		}
 
-        currentLine.localPosition = new Vector3(89.5f, -130f, 0f);
+        
         currentOptionLines = null;
 
 	}
