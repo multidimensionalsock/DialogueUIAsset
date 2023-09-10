@@ -162,12 +162,14 @@ public class DialogueView : DialogueViewBase
 		currentLineRect.localPosition = Vector3.zero; //new Vector3(100f, -130f, 0f);
 
         TextMeshProUGUI currentLineText = currentLine.AddComponent<TextMeshProUGUI>();
+		currentLineText.textInfo.lineInfo[0].lineHeight = 0;
         currentLineText.color = StandardTextColour;
         currentLineText.text = newDialogueLine;
 		currentLineText.font = fontAsset;
 		currentLineText.fontSize = fontSize;
+        currentLineText.textInfo.lineInfo[0].lineHeight = 0;
 
-		ContentSizeFitter currentLineSizeFit = currentLine.AddComponent<ContentSizeFitter>();
+        ContentSizeFitter currentLineSizeFit = currentLine.AddComponent<ContentSizeFitter>();
 		currentLineSizeFit.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
 		currentLineSizeFit.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 		Canvas.ForceUpdateCanvases();
@@ -184,7 +186,7 @@ public class DialogueView : DialogueViewBase
 		else
 		{
 			float lineCount = currentLineText.textInfo.lineCount + spaceBetweenLines;
-            float yincrease = lineCount * fontSize;
+            float yincrease = lineCount *  currentLineText.textInfo.lineInfo[0].lineHeight;
 
 			for (int i = 0; i < UIelements.Count; i++)
 			{
