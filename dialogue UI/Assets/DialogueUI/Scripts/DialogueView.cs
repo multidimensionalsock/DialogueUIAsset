@@ -15,13 +15,17 @@ public class DialogueView : DialogueViewBase
 	List<RectTransform> UIelements;
 	List<RectTransform> currentOptionLines;
 	[SerializeField] CharacterList characterList;
-	[SerializeField] GameObject linePrefab;
+	//[SerializeField] GameObject linePrefab;
 	[SerializeField] Image characterImage;
 	int currentOptionPosition = -1;
 	Action advanceHandler = null;
 	Action<int> SelectOption = null;
+
 	[SerializeField] Color dulledOptionColour;
 	[SerializeField] Color StandardTextColour;
+	[SerializeField] TMP_FontAsset fontAsset;
+	[SerializeField] float fontSize;
+
 	bool endOnNextClick = false;
 	[SerializeField] float lineIssueNumber;
 
@@ -140,7 +144,7 @@ public class DialogueView : DialogueViewBase
 		{
 			Debug.Log("charactr not null");
 			newDialogueLine = "<b><color=#" + UnityEngine.ColorUtility.ToHtmlStringRGBA(character.m_characterColor) + "> " + dialogueLine.CharacterName
-				+ ": </color></b>" + dialogueLine.TextWithoutCharacterName.Text ;
+				+ ": </color></b>" + dialogueLine.TextWithoutCharacterName.Text;
 			characterImage.sprite = character.m_characterImage; //set sprite for current character
 			
 		}
@@ -151,33 +155,44 @@ public class DialogueView : DialogueViewBase
 			newDialogueLine = dialogueLine.TextWithoutCharacterName.Text;
 		}
 
-		GameObject currentLine = Instantiate(linePrefab);
-		currentLine.transform.SetParent(this.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).transform.GetChild(0));
-		currentLine.gameObject.GetComponent<TextMeshProUGUI>().color = StandardTextColour;
-		currentLine.GetComponent<TextMeshProUGUI>().text = newDialogueLine;
-			
-		//get rect transform to use later 
-		RectTransform currentLineRect = currentLine.GetComponent<RectTransform>();
-		Canvas.ForceUpdateCanvases();
-		currentLineRect.localPosition = new Vector3(100f, -130f, 0f); 
+		GameObject currentLine = new GameObject();
+        currentLine.transform.SetParent(this.transform.GetChild(0).transform.GetChild(1).transform.GetChild(0).transform.GetChild(0), false);
+        RectTransform currentLineRect = currentLine.AddComponent<RectTransform>();
+		currentLineRect.sizeDelta = new Vector2(179, 0); ;
+        currentLineRect.anchorMin = new Vector2(0.5f, 0);
+		currentLineRect.anchorMax = new Vector2(0.5f, 0);
+		currentLineRect.pivot = new Vector2(0.5f, 0);
+		currentLineRect.localPosition = Vector3.zero; //new Vector3(100f, -130f, 0f);
 
-		Debug.Log(UIelements);
+        TextMeshProUGUI currentLineText = currentLine.AddComponent<TextMeshProUGUI>();
+        currentLineText.color = StandardTextColour;
+        currentLineText.text = newDialogueLine;
+		currentLineText.font = fontAsset;
+		currentLineText.fontSize = fontSize;
+
+		ContentSizeFitter currentLineSizeFit = currentLine.AddComponent<ContentSizeFitter>();
+		currentLineSizeFit.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+		currentLineSizeFit.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+		Canvas.ForceUpdateCanvases();
+
+        
+        currentLineRect.localPosition = new Vector3(89.5f, -130f, 0f);
+        
+
+        Debug.Log(UIelements);
 		if (UIelements.Count < 0)
 		{
 			Debug.Log("list was zero");
 		}
 		else
 		{
-			TextMeshProUGUI lineMesh = currentLine.GetComponent<TextMeshProUGUI>();
-			int lineCount = lineMesh.textInfo.lineCount + 1;
-			float fontSize = lineMesh.fontSize;
-			
-
+			int lineCount = currentLineText.textInfo.lineCount + 1;
             float yincrease = lineCount * fontSize;
 
 			for (int i = 0; i < UIelements.Count; i++)
 			{
-				UIelements[i].position = new Vector3(UIelements[i].position.x, UIelements[i].position.y + yincrease, UIelements[i].position.z);
+				//yincrease is only going up by 3 and idk why
+				UIelements[i].localPosition = new Vector3(UIelements[i].localPosition.x, UIelements[i].localPosition.y + yincrease, UIelements[i].localPosition.z);
 			}
 			if (currentOptionLines != null)
 			{
@@ -185,7 +200,7 @@ public class DialogueView : DialogueViewBase
 				{
 					for (int i = 0; i < currentOptionLines.Count; i++)
 					{
-						currentOptionLines[i].position = new Vector3(currentOptionLines[i].position.x, currentOptionLines[i].position.y + yincrease, currentOptionLines[i].position.z);
+						currentOptionLines[i].localPosition = new Vector3(currentOptionLines[i].localPosition.x, currentOptionLines[i].localPosition.y + yincrease, currentOptionLines[i].localPosition.z);
 					}
 				}
 			}
@@ -210,15 +225,15 @@ public class DialogueView : DialogueViewBase
 		{
 
             TextMeshProUGUI lineMesh = currentLine.GetComponent<TextMeshProUGUI>();
-            float lineCount = lineMesh.textInfo.lineCount + 0.5f;
-            float fontSize = lineMesh.fontSize;
+            float lineCount = lineMesh.textInfo.lineCount + 1f;
 
             float yincrease = lineCount * fontSize;
 			
 			for (int j = 0; j < UIelements.Count; j++)
 			{
-				UIelements[j].position = new Vector3(UIelements[j].position.x, UIelements[j].position.y - yincrease, UIelements[j].position.z);
-			}
+				UIelements[j].localPosition = new Vector3(UIelements[i].localPosition.x, UIelements[i].localPosition.y - yincrease, UIelements[i].localPosition.z);
+
+            }
 		}
 		for (int i = 0; i < currentOptionLines.Count; i++)
 		{
