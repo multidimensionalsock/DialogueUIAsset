@@ -155,7 +155,7 @@ public class DialogueView : DialogueViewBase
 		GameObject currentLine = new GameObject();
         currentLine.transform.SetParent(this.transform.GetChild(0).transform.GetChild(1).transform.GetChild(0).transform.GetChild(0), false);
         RectTransform currentLineRect = currentLine.AddComponent<RectTransform>();
-		currentLineRect.sizeDelta = new Vector2(179, 0); ;
+		currentLineRect.sizeDelta = new Vector2(170, 0); ;
         currentLineRect.anchorMin = new Vector2(0.5f, 0);
 		currentLineRect.anchorMax = new Vector2(0.5f, 0);
 		currentLineRect.pivot = new Vector2(0.5f, 0);
