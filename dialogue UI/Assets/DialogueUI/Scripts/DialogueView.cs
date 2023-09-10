@@ -25,9 +25,9 @@ public class DialogueView : DialogueViewBase
 	[SerializeField] Color StandardTextColour;
 	[SerializeField] TMP_FontAsset fontAsset;
 	[SerializeField] float fontSize;
+	[SerializeField] float spaceBetweenLines;
 
 	bool endOnNextClick = false;
-	[SerializeField] float lineIssueNumber;
 
 	PlayerInput m_input;
 
@@ -186,7 +186,7 @@ public class DialogueView : DialogueViewBase
 		}
 		else
 		{
-			int lineCount = currentLineText.textInfo.lineCount + 1;
+			float lineCount = currentLineText.textInfo.lineCount + spaceBetweenLines;
             float yincrease = lineCount * fontSize;
 
 			for (int i = 0; i < UIelements.Count; i++)
@@ -225,13 +225,13 @@ public class DialogueView : DialogueViewBase
 		{
 
             TextMeshProUGUI lineMesh = currentLine.GetComponent<TextMeshProUGUI>();
-            float lineCount = lineMesh.textInfo.lineCount + 1f;
+            float lineCount = lineMesh.textInfo.lineCount + spaceBetweenLines;
 
             float yincrease = lineCount * fontSize;
 			
 			for (int j = 0; j < UIelements.Count; j++)
 			{
-				UIelements[j].localPosition = new Vector3(UIelements[i].localPosition.x, UIelements[i].localPosition.y - yincrease, UIelements[i].localPosition.z);
+				UIelements[j].localPosition = new Vector3(UIelements[j].localPosition.x, UIelements[j].localPosition.y - yincrease, UIelements[j].localPosition.z);
 
             }
 		}

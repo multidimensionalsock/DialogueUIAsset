@@ -858,9 +858,9 @@ MonoBehaviour:
   characterImage: {fileID: 1732062348}
   dulledOptionColour: {r: 0.5377358, g: 0.5377358, b: 0.5377358, a: 1}
   StandardTextColour: {r: 1, g: 1, b: 1, a: 1}
-  fontAsset: {fileID: 0}
+  fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   fontSize: 6
-  lineIssueNumber: 4
+  spaceBetweenLines: 0.5
 --- !u!1 &1732062346
 GameObject:
   m_ObjectHideFlags: 0
