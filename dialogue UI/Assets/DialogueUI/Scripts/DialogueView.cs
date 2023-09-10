@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -15,7 +16,6 @@ public class DialogueView : DialogueViewBase
 	List<RectTransform> UIelements;
 	List<RectTransform> currentOptionLines;
 	[SerializeField] CharacterList characterList;
-	//[SerializeField] GameObject linePrefab;
 	[SerializeField] Image characterImage;
 	int currentOptionPosition = -1;
 	Action advanceHandler = null;
@@ -27,13 +27,11 @@ public class DialogueView : DialogueViewBase
 	[SerializeField] float fontSize;
 	[SerializeField] float spaceBetweenLines;
 
-	bool endOnNextClick = false;
 
 	PlayerInput m_input;
 
 	private void OnEnable()
 	{
-		endOnNextClick= false;
 		UIelements = new List<RectTransform>();
 		m_input = GetComponent<PlayerInput>();
 		m_input.currentActionMap.FindAction("NextLine").performed += CallNextLine;
@@ -42,11 +40,6 @@ public class DialogueView : DialogueViewBase
 
 	void CallNextLine(InputAction.CallbackContext context)
 	{
-		if (endOnNextClick)
-		{
-			endOnNextClick = false;
-			gameObject.SetActive(false);
-		}
 		if (currentOptionLines != null)
 		{
 			RemoveLines();
@@ -87,9 +80,6 @@ public class DialogueView : DialogueViewBase
 				currentOptionLines[currentOptionPosition].gameObject.GetComponent<TextMeshProUGUI>().color = StandardTextColour;
 				break;
 		}
-		
-		//currentOptionLines 
-		//currentOptionPosition	
 	}
 
 	public override void RunLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
@@ -101,11 +91,18 @@ public class DialogueView : DialogueViewBase
 			}
 
 			RectTransform currentLineRect = OutputLine(dialogueLine);
-			UIelements.Add(currentLineRect);
-
-			advanceHandler = requestInterrupt;
-			onDialogueLineFinished();
+        
+        if (UIelements.Count > 0)
+		{
+			TextMeshProUGUI previousLine = UIelements[UIelements.Count - 1].GetComponent<TextMeshProUGUI>();
+			previousLine.color = new Color(previousLine.color.r, previousLine.color.g, previousLine.color.b, previousLine.color.a / 2);
 		}
+        UIelements.Add(currentLineRect);
+
+
+        advanceHandler = requestInterrupt;
+		onDialogueLineFinished();
+	}
 
 	public override void RunOptions(DialogueOption[] dialogueOptions, Action<int> onOptionSelected)
 	{
@@ -218,7 +215,10 @@ public class DialogueView : DialogueViewBase
 		currentLine.position = currentOptionLines[0].position;
 		currentOptionLines[currentOptionPosition].gameObject.GetComponent<TextMeshProUGUI>().color = StandardTextColour;
 
-		UIelements.Add(currentLine);
+        TextMeshProUGUI previousLine = UIelements[UIelements.Count - 1].GetComponent<TextMeshProUGUI>();
+        previousLine.color = new Color(previousLine.color.r, previousLine.color.g, previousLine.color.b, previousLine.color.a / 2);
+
+        UIelements.Add(currentLine);
 		currentOptionLines.RemoveAt(currentOptionPosition);
 
 		for (int i = 0; i < currentOptionLines.Count; i++)
@@ -290,6 +290,6 @@ public class DialogueView : DialogueViewBase
 
 	public override void DialogueComplete()
 	{
-		endOnNextClick= true;
+        gameObject.SetActive(false);
 	}
 }
