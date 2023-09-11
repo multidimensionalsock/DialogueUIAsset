@@ -305,6 +305,11 @@ public class DialogueView : DialogueViewBase
 
 	public override void DialogueComplete()
 	{
+		for (int i = 0; i < UIelements.Count; i++)
+		{
+			Destroy(UIelements[i].gameObject);
+		}
+		UIelements.Clear();
         gameObject.SetActive(false);
 	}
 }
